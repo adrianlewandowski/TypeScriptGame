@@ -56,16 +56,34 @@ export default class GameScene extends THREE.Scene {
 
     document.addEventListener("keydown", this.handleKeyDown);
     document.addEventListener("keyup", this.handleKeyUp);
+    var textloader = new THREE.TextureLoader();
+    var textureFloor = textloader.load("/assets/Textures/MetalFloor.jpg");
+    var textureRoof = textloader.load("/assets/Textures/MetalRoof.png");
 
     var meshFloor = new THREE.Mesh(
       new THREE.PlaneGeometry(22, 22, 1, 1),
-      new THREE.MeshPhongMaterial({ color: 0x808080, wireframe: false })
+      new THREE.MeshPhongMaterial({
+        color: 0x808080,
+        map: textureFloor,
+      })
     );
     meshFloor.rotation.x = -Math.PI / 2;
     this.add(meshFloor);
 
-    var grid = new THREE.GridHelper(20, 10);
-    this.add(grid);
+    var roofFloor = new THREE.Mesh(
+      new THREE.PlaneGeometry(22, 22, 1, 1),
+      new THREE.MeshPhongMaterial({
+        color: 0x808080,
+        map: textureRoof,
+        wireframe: false,
+      })
+    );
+    roofFloor.rotation.x = (Math.PI * 1) / 2;
+    roofFloor.position.y = 1;
+    this.add(roofFloor);
+
+    //var grid = new THREE.GridHelper(20, 10);
+    //this.add(grid);
   }
   private handleKeyDown = (event: KeyboardEvent) => {
     this.keyDown.add(event.key.toLowerCase());
@@ -119,7 +137,7 @@ export default class GameScene extends THREE.Scene {
     let dz = a.z - b.z;
     const x = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
     if (this.player != undefined) {
-      if (x < 0.7) {
+      if (x < 0.75) {
         a;
         if (Math.pow(dx, 2) > Math.pow(dz, 2)) {
           if (a.x >= b.x) {
